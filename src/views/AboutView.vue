@@ -3,6 +3,10 @@
     <v-main>
       <v-container>
         <v-select label="Cidade" :items="cities"></v-select>
+        <v-select
+          label="Hóspedes"
+          :items="['Uma pessoa', 'Duas pessoas', 'Três pessoas']"
+        ></v-select>
         <v-btn color="primary">Pesquisar</v-btn>
         <v-menu
           v-model:menu="menu"
@@ -14,7 +18,8 @@
             <v-btn v-bind="props">Open Menu</v-btn>
           </template>
 
-          <v-date-picker elevation="24"></v-date-picker>
+          <v-date-picker elevation="24" title="Check-in"></v-date-picker>
+          <v-date-picker elevation="24" title="Check-out"> </v-date-picker>
         </v-menu>
       </v-container>
     </v-main>
