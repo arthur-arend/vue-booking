@@ -6,7 +6,7 @@
           <v-select label="Cidade" :items="cities" v-model="selectedCity"></v-select>
         </v-col>
         <v-col>
-          <v-select label="Hóspedes" :items="[1, 2, 3]"></v-select>
+          <v-select label="Hóspedes" :items="[1, 2, 3]" v-model="selectedGuests"></v-select>
         </v-col>
         <v-col>
           <v-select label="Quartos" :items="[1, 2, 3]"></v-select>
@@ -46,39 +46,8 @@
             </template>
           </v-text-field>
         </v-col>
-
-        <!-- <v-col>
-          <v-text-field label="Período" readonly type="date"></v-text-field>
-          <v-menu
-            v-model:menu="menu"
-            :close-on-content-click="false"
-            transition="scale-transition"
-            offset-y
-            @click:outside="handleMenuClose"
-          >
-            <template #activator="{ props }">
-              <v-btn icon="mdi-calendar" v-bind="props"></v-btn>
-            </template>
-            <v-row>
-              <v-col>
-                <v-date-picker
-                  v-model="checkInDate"
-                  elevation="24"
-                  title="Check-in"
-                ></v-date-picker>
-              </v-col>
-              <v-col>
-                <v-date-picker
-                  v-model="checkOutDate"
-                  elevation="24"
-                  title="Check-out"
-                ></v-date-picker>
-              </v-col>
-            </v-row>
-          </v-menu>
-        </v-col> -->
         <v-col>
-          <v-btn color="primary" @click="handleClick">Pesquisar</v-btn>
+          <v-btn color="primary" @click="handleClick" :disabled="!isCitySelected">Pesquisar</v-btn>
         </v-col>
       </v-row>
       <v-container v-if="hotels.length > 0">
@@ -100,7 +69,7 @@
             </v-expansion-panels>
 
             <v-card-text>
-              <p>{{ hotel.stars }} estrelas</p>
+              <p>{{ hotel.stars }} Estrelas</p>
             </v-card-text>
           </v-card>
         </v-row>
@@ -123,7 +92,7 @@ import {
   VTextField
 } from 'vuetify/components'
 import axios from 'axios'
-import type { Hotel } from '../interfaces/hotels/hotels.model'
+import type { Hotel, Room } from '../interfaces/hotels/hotels.model'
 
 export default defineComponent({
   components: {
@@ -142,6 +111,7 @@ export default defineComponent({
     const menu = ref(false)
     const selectedCity = ref<string | null>(null)
     const hotels = ref<Hotel[]>([])
+    const selectedGuests = ref()
 
     const checkInDate = ref<Date | null>(null)
     const checkOutDate = ref<Date | null>(null)
@@ -149,7 +119,7 @@ export default defineComponent({
     const today = computed(() => {
       const today = new Date()
       const yyyy = today.getFullYear()
-      const mm = String(today.getMonth() + 1).padStart(2, '0') // Months are 0-based
+      const mm = String(today.getMonth() + 1).padStart(2, '0')
       const dd = String(today.getDate()).padStart(2, '0')
       return `${yyyy}-${mm}-${dd}`
     })
@@ -183,29 +153,43 @@ export default defineComponent({
     }
 
     const formattedDates = computed(() => {
-      return `${formatDate(checkInDate.value)} até ${formatDate(checkOutDate.value)}`
+      if (checkInDate.value && checkOutDate.value) {
+        return `${formatDate(checkInDate.value)} até ${formatDate(checkOutDate.value)}`
+      }
+      return ''
     })
 
     const handleMenuClose = () => {
       menu.value = false
     }
 
-    const handleClick = async () => {
-      console.log(formattedDates.value)
+    const filterRoomsByCapacity = (hotels: Hotel[], minCapacity: number | string) => {
+      if (typeof minCapacity === 'number' && !isNaN(minCapacity)) {
+        return hotels
+          .map((hotel) => ({
+            ...hotel,
+            rooms: hotel.rooms.filter((room) => room.capacity >= minCapacity)
+          }))
+          .filter((hotel) => hotel.rooms.length > 0)
+      }
+      return hotels
+    }
 
+    const handleClick = async () => {
       try {
         const response = await axios.get('http://localhost:3001/hotels', {
           params: {
             location: selectedCity.value
           }
         })
-        hotels.value = response.data
-
-        console.log(hotels.value)
+        hotels.value = filterRoomsByCapacity(response.data, selectedGuests.value)
       } catch (error) {
         console.log(error)
       }
     }
+    const isCitySelected = computed(() => {
+      return selectedCity.value !== null && selectedCity.value.trim() !== ''
+    })
 
     return {
       cities,
@@ -219,7 +203,9 @@ export default defineComponent({
       formattedDates,
       handleMenuClose,
       today,
-      minCheckoutDate
+      minCheckoutDate,
+      isCitySelected,
+      selectedGuests
     }
   }
 })
