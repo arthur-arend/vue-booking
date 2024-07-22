@@ -16,6 +16,11 @@ import HelloWorld from './components/HelloWorld.vue'
 </template>
 
 <style scoped>
+header {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
 /* header {
   line-height: 1.5;
   max-height: 100vh;

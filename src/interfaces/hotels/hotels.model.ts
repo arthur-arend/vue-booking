@@ -10,5 +10,6 @@ export interface Hotel {
   name: string
   rooms: Room[]
   location: string
+  address: string
   stars: number
 }

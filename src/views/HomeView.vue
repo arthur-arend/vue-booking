@@ -20,7 +20,12 @@
           ></v-select>
         </v-col>
         <v-col cols="8" sm="4" md="2">
-          <v-select variant="outlined" label="Quartos" :items="[1, 2, 3]"></v-select>
+          <v-select
+            variant="outlined"
+            label="Quartos"
+            :items="[1, 2, 3]"
+            v-model="selectedRooms"
+          ></v-select>
         </v-col>
         <v-col cols="8" sm="4" md="3" class="search_date">
           <v-text-field
@@ -30,8 +35,7 @@
             type="text"
             readonly
             class="thin-text-field"
-          >
-          </v-text-field>
+          ></v-text-field>
           <v-menu
             v-model:menu="menu"
             :close-on-content-click="false"
@@ -65,21 +69,14 @@
           </v-menu>
         </v-col>
         <v-col cols="12" sm="12" md="2" class="search_cta">
-          <v-btn
-            class="search__cta"
-            size="x-large"
-            color="#201E43"
-            @click="handleClick"
-            :disabled="!isCitySelected"
+          <v-btn class="search__cta" size="x-large" color="#201E43" @click="handleClick"
             >Pesquisar</v-btn
           >
         </v-col>
       </v-row>
       <v-container v-if="hotels.length > 0" class="container_info">
-        <v-row>
-          <v-btn color="primary" @click="sortHotelsByStars">Ordenar</v-btn>
-        </v-row>
-        <v-row v-for="hotel in hotels" :key="hotel.id" cols="12" md="4">
+        <v-btn color="primary" @click="sortHotelsByStars">Ordenar</v-btn>
+        <v-row v-for="hotel in hotels" :key="hotel.id">
           <HotelCard :hotel="hotel" />
         </v-row>
       </v-container>
@@ -88,7 +85,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue'
+import { defineComponent, computed, ref } from 'vue'
+import { useFilterValuesStore } from '../stores/filterValues'
 import {
   VApp,
   VMain,
@@ -117,14 +115,11 @@ export default defineComponent({
     HotelCard
   },
   setup() {
+    const filterValuesStore = useFilterValuesStore() // Create a reference to the store
     const cities = ref([])
     const menu = ref(false)
-    const selectedCity = ref<any>(null)
     const hotels = ref<Hotel[]>([])
-    const selectedGuests = ref<number | null>(null)
-
-    const checkInDate = ref<Date | null>(null)
-    const checkOutDate = ref<Date | null>(null)
+    const selectedCity = ref<any>(null)
 
     const today = computed(() => {
       const today = new Date()
@@ -135,8 +130,8 @@ export default defineComponent({
     })
 
     const minCheckoutDate = computed(() => {
-      if (checkInDate.value) {
-        return checkInDate.value
+      if (filterValuesStore.checkInDate) {
+        return filterValuesStore.checkInDate
       }
       return today.value
     })
@@ -157,8 +152,8 @@ export default defineComponent({
     }
 
     const formattedDates = computed(() => {
-      if (checkInDate.value && checkOutDate.value) {
-        return `${formatDate(checkInDate.value)} até ${formatDate(checkOutDate.value)}`
+      if (filterValuesStore.checkInDate && filterValuesStore.checkOutDate) {
+        return `${formatDate(filterValuesStore.checkInDate)} até ${formatDate(filterValuesStore.checkOutDate)}`
       }
       return ''
     })
@@ -186,31 +181,39 @@ export default defineComponent({
             location: selectedCity.value
           }
         })
-        hotels.value = filterRoomsByCapacity(response.data, selectedGuests.value || 0)
+        hotels.value = filterRoomsByCapacity(response.data, filterValuesStore.selectedGuests || 0)
       } catch (error) {
         console.log(error)
       }
     }
 
-    const isCitySelected = computed(() => {
-      return selectedCity.value !== null && selectedCity.value.trim() !== ''
-    })
-
     return {
       cities,
       menu,
-      selectedCity,
       hotels,
-      checkInDate,
-      checkOutDate,
+      today,
+      selectedCity,
+      selectedGuests: computed({
+        get: () => filterValuesStore.selectedGuests,
+        set: (value: number | null) => filterValuesStore.setSelectedGuests(value)
+      }),
+      selectedRooms: computed({
+        get: () => filterValuesStore.selectedRooms,
+        set: (value: number | null) => filterValuesStore.setSelectedRooms(value)
+      }),
+      checkInDate: computed({
+        get: () => filterValuesStore.checkInDate,
+        set: (value: Date | null) => filterValuesStore.setCheckInDate(value)
+      }),
+      checkOutDate: computed({
+        get: () => filterValuesStore.checkOutDate,
+        set: (value: Date | null) => filterValuesStore.setCheckOutDate(value)
+      }),
+      formattedDates,
+      minCheckoutDate,
       handleClick,
       sortHotelsByStars,
-      formattedDates,
-      handleMenuClose,
-      today,
-      minCheckoutDate,
-      isCitySelected,
-      selectedGuests
+      handleMenuClose
     }
   }
 })
@@ -250,18 +253,16 @@ export default defineComponent({
 .container_info {
   width: 100%;
   height: auto;
+  padding: 0 0 2rem 1rem;
 
+  margin-top: 1rem;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   flex-direction: column;
-}
 
-@media (min-width: 1024px) {
-  .about {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
+  v-row {
+    width: 100%;
   }
 }
 </style>

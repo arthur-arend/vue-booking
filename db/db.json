@@ -4,12 +4,14 @@
     {
       "id": 1,
       "name": "Açores Palace Hotel",
+
       "rooms": [
         { "id": 1, "name": "Solteiro", "capacity": 1, "price": 100 },
         { "id": 2, "name": "Casal", "capacity": 2, "price": 150 },
         { "id": 3, "name": "Família", "capacity": 3, "price": 200 }
       ],
       "location": "Porto Alegre",
+      "address": "Rua dos Andradas, 1001",
       "stars": 4
     },
     {
@@ -21,6 +23,7 @@
         { "id": 3, "name": "Família", "capacity": 3, "price": 200 }
       ],
       "location": "Porto Alegre",
+      "address": "Av. Borges de Medeiros, 2105",
       "stars": 5
     },
     {
@@ -32,6 +35,7 @@
         { "id": 3, "name": "Família", "capacity": 3, "price": 200 }
       ],
       "location": "Porto Alegre",
+      "address": "Av. Alberto Bins, 514",
       "stars": 3
     },
     {
@@ -43,6 +47,7 @@
         { "id": 3, "name": "Família", "capacity": 3, "price": 200 }
       ],
       "location": "São Paulo",
+      "address": "Rua dos Pinheiros, 432",
       "stars": 5
     },
     {
@@ -54,6 +59,7 @@
         { "id": 3, "name": "Família", "capacity": 3, "price": 200 }
       ],
       "location": "São Paulo",
+      "address": "Av. Monteiro Lobato, 500",
       "stars": 3
     },
     {
@@ -65,6 +71,7 @@
         { "id": 3, "name": "Família", "capacity": 3, "price": 200 }
       ],
       "location": "Rio de Janeiro",
+      "address": "Rua Senador Dantas, 25",
       "stars": 3
     },
     {
@@ -76,6 +83,7 @@
         { "id": 3, "name": "Família", "capacity": 3, "price": 200 }
       ],
       "location": "Rio de Janeiro",
+      "address": "Av. Presidente Vargas, 392",
       "stars": 4
     },
     {
@@ -87,6 +95,7 @@
         { "id": 3, "name": "Família", "capacity": 3, "price": 200 }
       ],
       "location": "Rio de Janeiro",
+      "address": "Av. Atlântica, 1702",
       "stars": 5
     },
     {
@@ -98,6 +107,7 @@
         { "id": 3, "name": "Família", "capacity": 3, "price": 200 }
       ],
       "location": "Rio de Janeiro",
+      "address": "Rua Barata Ribeiro, 263",
       "stars": 3
     },
     {
@@ -109,6 +119,7 @@
         { "id": 3, "name": "Família", "capacity": 3, "price": 200 }
       ],
       "location": "Curitiba",
+      "address": "Rua Mariano Torres, 976",
       "stars": 4
     },
     {
@@ -120,6 +131,7 @@
         { "id": 3, "name": "Família", "capacity": 3, "price": 200 }
       ],
       "location": "Curitiba",
+      "address": "Rua XV de Novembro, 830",
       "stars": 4
     },
     {
@@ -131,6 +143,7 @@
         { "id": 3, "name": "Família", "capacity": 3, "price": 200 }
       ],
       "location": "Curitiba",
+      "address": "Rua Desembargador Westphalen, 344",
       "stars": 4
     }
   ]
