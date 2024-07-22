@@ -2,16 +2,21 @@
   <v-app>
     <v-main>
       <v-row>
-        <v-col>
+        <v-col cols="12" sm="6" md="2">
           <v-select label="Cidade" :items="cities" v-model="selectedCity"></v-select>
         </v-col>
-        <v-col>
-          <v-select label="Hóspedes" :items="[1, 2, 3]" v-model="selectedGuests"></v-select>
+        <v-col cols="12" sm="6" md="2">
+          <v-select
+            label="Hóspedes"
+            :items="[1, 2, 3]"
+            v-model="selectedGuests"
+            class="small-select"
+          ></v-select>
         </v-col>
-        <v-col>
+        <v-col cols="12" sm="6" md="2">
           <v-select label="Quartos" :items="[1, 2, 3]"></v-select>
         </v-col>
-        <v-col>
+        <v-col cols="12" sm="6" md="2">
           <v-text-field v-model="formattedDates" label="Período" type="text" readonly>
             <template v-slot:append>
               <v-menu
@@ -22,7 +27,9 @@
                 @click:outside="handleMenuClose"
               >
                 <template v-slot:activator="{ props }">
-                  <v-btn icon="mdi-calendar" v-bind="props" class="mt-n2"></v-btn>
+                  <v-btn v-bind="props" size="x-large" color="primary" class="mt-n2">
+                    <v-icon icon="mdi-calendar" start></v-icon>
+                  </v-btn>
                 </template>
                 <v-row>
                   <v-col>
@@ -46,8 +53,10 @@
             </template>
           </v-text-field>
         </v-col>
-        <v-col>
-          <v-btn color="primary" @click="handleClick" :disabled="!isCitySelected">Pesquisar</v-btn>
+        <v-col cols="12" sm="6" md="2" class="d-flex align-center">
+          <v-btn size="x-large" color="primary" @click="handleClick" :disabled="!isCitySelected"
+            >Pesquisar</v-btn
+          >
         </v-col>
       </v-row>
       <v-container v-if="hotels.length > 0">
