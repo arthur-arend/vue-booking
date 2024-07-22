@@ -31,40 +31,38 @@
             readonly
             class="thin-text-field"
           >
-            <template v-slot:append>
-              <v-menu
-                v-model:menu="menu"
-                :close-on-content-click="false"
-                transition="scale-transition"
-                offset-y
-                @click:outside="handleMenuClose"
-              >
-                <template v-slot:activator="{ props }">
-                  <v-btn v-bind="props" size="x-large" color="primary">
-                    <v-icon icon="mdi-calendar" start></v-icon>
-                  </v-btn>
-                </template>
-                <v-row>
-                  <v-col>
-                    <v-date-picker
-                      v-model="checkInDate"
-                      :min="today"
-                      elevation="24"
-                      title="Check-in"
-                    ></v-date-picker>
-                  </v-col>
-                  <v-col>
-                    <v-date-picker
-                      v-model="checkOutDate"
-                      :min="minCheckoutDate"
-                      elevation="24"
-                      title="Check-out"
-                    ></v-date-picker>
-                  </v-col>
-                </v-row>
-              </v-menu>
-            </template>
           </v-text-field>
+          <v-menu
+            v-model:menu="menu"
+            :close-on-content-click="false"
+            transition="scale-transition"
+            offset-y
+            @click:outside="handleMenuClose"
+          >
+            <template v-slot:activator="{ props }">
+              <v-btn v-bind="props" size="x-large" color="primary">
+                <v-icon icon="mdi-calendar" start></v-icon>
+              </v-btn>
+            </template>
+            <v-row>
+              <v-col>
+                <v-date-picker
+                  v-model="checkInDate"
+                  :min="today"
+                  elevation="24"
+                  title="Check-in"
+                ></v-date-picker>
+              </v-col>
+              <v-col>
+                <v-date-picker
+                  v-model="checkOutDate"
+                  :min="minCheckoutDate"
+                  elevation="24"
+                  title="Check-out"
+                ></v-date-picker>
+              </v-col>
+            </v-row>
+          </v-menu>
         </v-col>
         <v-col cols="12" sm="6" md="2">
           <v-btn size="x-large" color="primary" @click="handleClick" :disabled="!isCitySelected"
@@ -245,12 +243,10 @@ export default defineComponent({
 .date__container {
   padding: 0;
   display: flex;
-  align-items: center;
   justify-content: center;
 
-  .thin-text-field .v-input__control {
-    width: 100%;
-    height: 80%;
+  .v-btn.v-btn--density-default {
+    height: 55px;
   }
 }
 
