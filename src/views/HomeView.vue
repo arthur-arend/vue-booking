@@ -1,12 +1,18 @@
 <template>
   <v-app>
     <v-main>
-      <v-row>
+      <v-row class="search_container">
         <v-col cols="12" sm="6" md="2">
-          <v-select label="Cidade" :items="cities" v-model="selectedCity"></v-select>
+          <v-select
+            variant="outlined"
+            label="Cidade"
+            :items="cities"
+            v-model="selectedCity"
+          ></v-select>
         </v-col>
         <v-col cols="12" sm="6" md="2">
           <v-select
+            variant="outlined"
             label="Hóspedes"
             :items="[1, 2, 3]"
             v-model="selectedGuests"
@@ -14,10 +20,17 @@
           ></v-select>
         </v-col>
         <v-col cols="12" sm="6" md="2">
-          <v-select label="Quartos" :items="[1, 2, 3]"></v-select>
+          <v-select variant="outlined" label="Quartos" :items="[1, 2, 3]"></v-select>
         </v-col>
-        <v-col cols="12" sm="6" md="2">
-          <v-text-field v-model="formattedDates" label="Período" type="text" readonly>
+        <v-col cols="12" sm="6" md="3" class="date__container">
+          <v-text-field
+            variant="outlined"
+            v-model="formattedDates"
+            label="Período"
+            type="text"
+            readonly
+            class="thin-text-field"
+          >
             <template v-slot:append>
               <v-menu
                 v-model:menu="menu"
@@ -27,7 +40,7 @@
                 @click:outside="handleMenuClose"
               >
                 <template v-slot:activator="{ props }">
-                  <v-btn v-bind="props" size="x-large" color="primary" class="mt-n2">
+                  <v-btn v-bind="props" size="x-large" color="primary">
                     <v-icon icon="mdi-calendar" start></v-icon>
                   </v-btn>
                 </template>
@@ -53,7 +66,7 @@
             </template>
           </v-text-field>
         </v-col>
-        <v-col cols="12" sm="6" md="2" class="d-flex align-center">
+        <v-col cols="12" sm="6" md="2">
           <v-btn size="x-large" color="primary" @click="handleClick" :disabled="!isCitySelected"
             >Pesquisar</v-btn
           >
@@ -220,7 +233,27 @@ export default defineComponent({
 })
 </script>
 
-<style>
+<style lang="scss">
+.search_container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.date__container {
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .thin-text-field .v-input__control {
+    width: 100%;
+    height: 80%;
+  }
+}
+
 @media (min-width: 1024px) {
   .about {
     min-height: 100vh;
