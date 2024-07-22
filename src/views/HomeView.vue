@@ -2,7 +2,7 @@
   <v-app>
     <v-main>
       <v-row class="search_container">
-        <v-col cols="12" sm="6" md="2">
+        <v-col cols="8" sm="4" md="2">
           <v-select
             variant="outlined"
             label="Cidade"
@@ -10,7 +10,7 @@
             v-model="selectedCity"
           ></v-select>
         </v-col>
-        <v-col cols="12" sm="6" md="2">
+        <v-col cols="8" sm="4" md="2">
           <v-select
             variant="outlined"
             label="Hóspedes"
@@ -19,10 +19,10 @@
             class="small-select"
           ></v-select>
         </v-col>
-        <v-col cols="12" sm="6" md="2">
+        <v-col cols="8" sm="4" md="2">
           <v-select variant="outlined" label="Quartos" :items="[1, 2, 3]"></v-select>
         </v-col>
-        <v-col cols="12" sm="6" md="3" class="date__container">
+        <v-col cols="8" sm="4" md="3" class="search_date">
           <v-text-field
             variant="outlined"
             v-model="formattedDates"
@@ -40,7 +40,7 @@
             @click:outside="handleMenuClose"
           >
             <template v-slot:activator="{ props }">
-              <v-btn v-bind="props" size="x-large" color="primary">
+              <v-btn v-bind="props" size="x-large" color="#201E43">
                 <v-icon icon="mdi-calendar" start></v-icon>
               </v-btn>
             </template>
@@ -64,34 +64,23 @@
             </v-row>
           </v-menu>
         </v-col>
-        <v-col cols="12" sm="6" md="2">
-          <v-btn size="x-large" color="primary" @click="handleClick" :disabled="!isCitySelected"
+        <v-col cols="12" sm="12" md="2" class="search_cta">
+          <v-btn
+            class="search__cta"
+            size="x-large"
+            color="#201E43"
+            @click="handleClick"
+            :disabled="!isCitySelected"
             >Pesquisar</v-btn
           >
         </v-col>
       </v-row>
-      <v-container v-if="hotels.length > 0">
+      <v-container v-if="hotels.length > 0" class="container_info">
         <v-row>
           <v-btn color="primary" @click="sortHotelsByStars">Ordenar</v-btn>
         </v-row>
-
         <v-row v-for="hotel in hotels" :key="hotel.id" cols="12" md="4">
-          <v-card>
-            <v-card-title>{{ hotel.name }}</v-card-title>
-            <v-expansion-panels>
-              <v-expansion-panel title="Quartos">
-                <ul>
-                  <li v-for="room in hotel.rooms" :key="room.id">
-                    {{ room.name }} - R$ {{ room.price }}
-                  </li>
-                </ul>
-              </v-expansion-panel>
-            </v-expansion-panels>
-
-            <v-card-text>
-              <p>{{ hotel.stars }} Estrelas</p>
-            </v-card-text>
-          </v-card>
+          <HotelCard :hotel="hotel" />
         </v-row>
       </v-container>
     </v-main>
@@ -108,11 +97,12 @@ import {
   VSelect,
   VMenu,
   VDatePicker,
-  VCard,
   VTextField
 } from 'vuetify/components'
 import axios from 'axios'
-import type { Hotel, Room } from '../interfaces/hotels/hotels.model'
+import type { Hotel } from '../interfaces/hotels/hotels.model'
+import { formatDate } from '../utils/date-time'
+import HotelCard from '../components/Card/HotelCard.vue'
 
 export default defineComponent({
   components: {
@@ -123,15 +113,15 @@ export default defineComponent({
     VSelect,
     VMenu,
     VDatePicker,
-    VCard,
-    VTextField
+    VTextField,
+    HotelCard
   },
   setup() {
     const cities = ref([])
     const menu = ref(false)
-    const selectedCity = ref<string | null>(null)
+    const selectedCity = ref<any>(null)
     const hotels = ref<Hotel[]>([])
-    const selectedGuests = ref()
+    const selectedGuests = ref<number | null>(null)
 
     const checkInDate = ref<Date | null>(null)
     const checkOutDate = ref<Date | null>(null)
@@ -166,12 +156,6 @@ export default defineComponent({
       hotels.value = [...hotels.value].sort((a, b) => b.stars - a.stars)
     }
 
-    const formatDate = (date: Date | null) => {
-      if (date === null) return ''
-      const [year, month, day] = date.toISOString().split('T')[0].split('-')
-      return `${day}-${month}-${year}`
-    }
-
     const formattedDates = computed(() => {
       if (checkInDate.value && checkOutDate.value) {
         return `${formatDate(checkInDate.value)} até ${formatDate(checkOutDate.value)}`
@@ -202,11 +186,12 @@ export default defineComponent({
             location: selectedCity.value
           }
         })
-        hotels.value = filterRoomsByCapacity(response.data, selectedGuests.value)
+        hotels.value = filterRoomsByCapacity(response.data, selectedGuests.value || 0)
       } catch (error) {
         console.log(error)
       }
     }
+
     const isCitySelected = computed(() => {
       return selectedCity.value !== null && selectedCity.value.trim() !== ''
     })
@@ -231,23 +216,45 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .search_container {
+  background-color: #eeeeee;
   width: 100%;
+  height: fit-content;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 2rem;
+  gap: 1rem;
+  padding-top: 1rem;
+
+  .search_date {
+    padding: 0;
+    display: flex;
+    justify-content: center;
+
+    .v-btn.v-btn--density-default {
+      height: 55px;
+    }
+  }
+
+  .search_cta {
+    width: 100%;
+    align-self: flex-end;
+    button {
+      height: 55px;
+      margin-bottom: 23px;
+    }
+  }
 }
 
-.date__container {
-  padding: 0;
-  display: flex;
-  justify-content: center;
+.container_info {
+  width: 100%;
+  height: auto;
 
-  .v-btn.v-btn--density-default {
-    height: 55px;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 @media (min-width: 1024px) {
