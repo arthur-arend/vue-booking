@@ -6,7 +6,7 @@
           <v-select
             variant="outlined"
             label="Cidade"
-            :items="cities"
+            :items="cityNames"
             v-model="selectedCity"
           ></v-select>
         </v-col>
@@ -74,10 +74,16 @@
           >
         </v-col>
       </v-row>
-      <v-container v-if="hotels.length > 0" class="container_info">
-        <v-btn color="primary" @click="sortHotelsByStars">Ordenar</v-btn>
-        <v-row v-for="hotel in hotels" :key="hotel.id">
-          <HotelCard :hotel="hotel" />
+      <v-container v-if="hotels.length !== 0" class="container_info">
+        <v-btn
+          @click="sortHotelsByStars"
+          size="x-large"
+          color="#201E43"
+          class="container_info__button"
+          >Ordenar</v-btn
+        >
+        <v-row>
+          <HotelCard v-for="hotel in hotels" :key="hotel.id" :hotel="hotel" />
         </v-row>
       </v-container>
     </v-main>
@@ -85,8 +91,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref } from 'vue'
+import { defineComponent, computed, ref, onMounted } from 'vue'
 import { useFilterValuesStore } from '../stores/filterValues'
+import { useHotelsStore } from '../stores/hotelsStore'
 import {
   VApp,
   VMain,
@@ -115,11 +122,16 @@ export default defineComponent({
     HotelCard
   },
   setup() {
-    const filterValuesStore = useFilterValuesStore() // Create a reference to the store
-    const cities = ref([])
+    const filterValuesStore = useFilterValuesStore()
+    const hotelsStore = useHotelsStore()
+    const cities = ref<{ id: number; name: string }[]>([])
     const menu = ref(false)
-    const hotels = ref<Hotel[]>([])
-    const selectedCity = ref<any>(null)
+    const selectedCity = computed({
+      get: () => filterValuesStore.getSelectedCity,
+      set: (value: string | null) => filterValuesStore.setSelectedCity(value)
+    })
+
+    const hotels = computed(() => hotelsStore.hotels)
 
     const today = computed(() => {
       const today = new Date()
@@ -130,10 +142,7 @@ export default defineComponent({
     })
 
     const minCheckoutDate = computed(() => {
-      if (filterValuesStore.checkInDate) {
-        return filterValuesStore.checkInDate
-      }
-      return today.value
+      return filterValuesStore.getCheckInDate || today.value
     })
 
     const fetchCities = async () => {
@@ -145,15 +154,19 @@ export default defineComponent({
       }
     }
 
-    fetchCities()
+    onMounted(() => {
+      fetchCities()
+    })
+
+    const cityNames = computed(() => cities.value.map((city) => city.name))
 
     const sortHotelsByStars = () => {
-      hotels.value = [...hotels.value].sort((a, b) => b.stars - a.stars)
+      hotelsStore.hotels = [...hotelsStore.hotels].sort((a, b) => b.stars - a.stars)
     }
 
     const formattedDates = computed(() => {
-      if (filterValuesStore.checkInDate && filterValuesStore.checkOutDate) {
-        return `${formatDate(filterValuesStore.checkInDate)} até ${formatDate(filterValuesStore.checkOutDate)}`
+      if (filterValuesStore.getCheckInDate && filterValuesStore.getCheckOutDate) {
+        return `${formatDate(filterValuesStore.getCheckInDate)} até ${formatDate(filterValuesStore.getCheckOutDate)}`
       }
       return ''
     })
@@ -177,36 +190,39 @@ export default defineComponent({
     const handleClick = async () => {
       try {
         const response = await axios.get('http://localhost:3001/hotels', {
-          params: {
-            location: selectedCity.value
-          }
+          params: { location: selectedCity.value }
         })
-        hotels.value = filterRoomsByCapacity(response.data, filterValuesStore.selectedGuests || 0)
+        const filteredHotels = filterRoomsByCapacity(
+          response.data,
+          filterValuesStore.getSelectedGuests || 0
+        )
+        hotelsStore.setHotels(filteredHotels)
       } catch (error) {
-        console.log(error)
+        console.error('Error fetching hotels:', error)
       }
     }
 
     return {
       cities,
+      cityNames,
       menu,
       hotels,
       today,
       selectedCity,
       selectedGuests: computed({
-        get: () => filterValuesStore.selectedGuests,
+        get: () => filterValuesStore.getSelectedGuests,
         set: (value: number | null) => filterValuesStore.setSelectedGuests(value)
       }),
       selectedRooms: computed({
-        get: () => filterValuesStore.selectedRooms,
+        get: () => filterValuesStore.getSelectedRooms,
         set: (value: number | null) => filterValuesStore.setSelectedRooms(value)
       }),
       checkInDate: computed({
-        get: () => filterValuesStore.checkInDate,
+        get: () => filterValuesStore.getCheckInDate,
         set: (value: Date | null) => filterValuesStore.setCheckInDate(value)
       }),
       checkOutDate: computed({
-        get: () => filterValuesStore.checkOutDate,
+        get: () => filterValuesStore.getCheckOutDate,
         set: (value: Date | null) => filterValuesStore.setCheckOutDate(value)
       }),
       formattedDates,
@@ -260,6 +276,10 @@ export default defineComponent({
   align-items: flex-start;
   justify-content: center;
   flex-direction: column;
+
+  .container_info__button {
+    align-self: flex-end;
+  }
 
   v-row {
     width: 100%;

@@ -2,12 +2,16 @@ import { defineStore } from 'pinia'
 
 export const useFilterValuesStore = defineStore('filterValues', {
   state: () => ({
+    selectedCity: null as string | null,
     selectedGuests: null as number | null,
     checkInDate: null as Date | null,
     checkOutDate: null as Date | null,
     selectedRooms: null as number | null
   }),
   actions: {
+    setSelectedCity(city: string | null) {
+      this.selectedCity = city
+    },
     setSelectedGuests(guests: number | null) {
       this.selectedGuests = guests
     },
@@ -22,6 +26,7 @@ export const useFilterValuesStore = defineStore('filterValues', {
     }
   },
   getters: {
+    getSelectedCity: (state) => state.selectedCity,
     getSelectedGuests: (state) => state.selectedGuests,
     getCheckInDate: (state) => state.checkInDate,
     getCheckOutDate: (state) => state.checkOutDate,

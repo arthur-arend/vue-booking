@@ -1,14 +1,45 @@
 {
-  "cities": ["Porto Alegre", "São Paulo", "Rio de Janeiro", "Curitiba"],
+  "cities": [
+    {
+      "id": 1,
+      "name": "Porto Alegre"
+    },
+    {
+      "id": 2,
+      "name": "São Paulo"
+    },
+    {
+      "id": 3,
+      "name": "Rio de Janeiro"
+    },
+    {
+      "id": 4,
+      "name": "Curitiba"
+    }
+  ],
   "hotels": [
     {
       "id": 1,
       "name": "Açores Palace Hotel",
-
       "rooms": [
-        { "id": 1, "name": "Solteiro", "capacity": 1, "price": 100 },
-        { "id": 2, "name": "Casal", "capacity": 2, "price": 150 },
-        { "id": 3, "name": "Família", "capacity": 3, "price": 200 }
+        {
+          "id": 1,
+          "name": "Solteiro",
+          "capacity": 1,
+          "price": 100
+        },
+        {
+          "id": 2,
+          "name": "Casal",
+          "capacity": 2,
+          "price": 150
+        },
+        {
+          "id": 3,
+          "name": "Família",
+          "capacity": 3,
+          "price": 200
+        }
       ],
       "location": "Porto Alegre",
       "address": "Rua dos Andradas, 1001",
@@ -18,9 +49,24 @@
       "id": 2,
       "name": "InterCity Premium Porto Alegre",
       "rooms": [
-        { "id": 1, "name": "Solteiro", "capacity": 1, "price": 100 },
-        { "id": 2, "name": "Casal", "capacity": 2, "price": 150 },
-        { "id": 3, "name": "Família", "capacity": 3, "price": 200 }
+        {
+          "id": 1,
+          "name": "Solteiro",
+          "capacity": 1,
+          "price": 100
+        },
+        {
+          "id": 2,
+          "name": "Casal",
+          "capacity": 2,
+          "price": 150
+        },
+        {
+          "id": 3,
+          "name": "Família",
+          "capacity": 3,
+          "price": 200
+        }
       ],
       "location": "Porto Alegre",
       "address": "Av. Borges de Medeiros, 2105",
@@ -30,9 +76,24 @@
       "id": 3,
       "name": "Plaza São Rafael Hotel e Centro de Eventos",
       "rooms": [
-        { "id": 1, "name": "Solteiro", "capacity": 1, "price": 100 },
-        { "id": 2, "name": "Casal", "capacity": 2, "price": 150 },
-        { "id": 3, "name": "Família", "capacity": 3, "price": 200 }
+        {
+          "id": 1,
+          "name": "Solteiro",
+          "capacity": 1,
+          "price": 100
+        },
+        {
+          "id": 2,
+          "name": "Casal",
+          "capacity": 2,
+          "price": 150
+        },
+        {
+          "id": 3,
+          "name": "Família",
+          "capacity": 3,
+          "price": 200
+        }
       ],
       "location": "Porto Alegre",
       "address": "Av. Alberto Bins, 514",
@@ -42,9 +103,24 @@
       "id": 4,
       "name": "Gran Villagio Hotel",
       "rooms": [
-        { "id": 1, "name": "Solteiro", "capacity": 1, "price": 100 },
-        { "id": 2, "name": "Casal", "capacity": 2, "price": 150 },
-        { "id": 3, "name": "Família", "capacity": 3, "price": 200 }
+        {
+          "id": 1,
+          "name": "Solteiro",
+          "capacity": 1,
+          "price": 100
+        },
+        {
+          "id": 2,
+          "name": "Casal",
+          "capacity": 2,
+          "price": 150
+        },
+        {
+          "id": 3,
+          "name": "Família",
+          "capacity": 3,
+          "price": 200
+        }
       ],
       "location": "São Paulo",
       "address": "Rua dos Pinheiros, 432",
@@ -54,9 +130,24 @@
       "id": 5,
       "name": "San Raphael Hotel Guarulhos Airport",
       "rooms": [
-        { "id": 1, "name": "Solteiro", "capacity": 1, "price": 100 },
-        { "id": 2, "name": "Casal", "capacity": 2, "price": 150 },
-        { "id": 3, "name": "Família", "capacity": 3, "price": 200 }
+        {
+          "id": 1,
+          "name": "Solteiro",
+          "capacity": 1,
+          "price": 100
+        },
+        {
+          "id": 2,
+          "name": "Casal",
+          "capacity": 2,
+          "price": 150
+        },
+        {
+          "id": 3,
+          "name": "Família",
+          "capacity": 3,
+          "price": 200
+        }
       ],
       "location": "São Paulo",
       "address": "Av. Monteiro Lobato, 500",
@@ -66,9 +157,24 @@
       "id": 6,
       "name": "Hotel Atlantico Business Centro",
       "rooms": [
-        { "id": 1, "name": "Solteiro", "capacity": 1, "price": 100 },
-        { "id": 2, "name": "Casal", "capacity": 2, "price": 150 },
-        { "id": 3, "name": "Família", "capacity": 3, "price": 200 }
+        {
+          "id": 1,
+          "name": "Solteiro",
+          "capacity": 1,
+          "price": 100
+        },
+        {
+          "id": 2,
+          "name": "Casal",
+          "capacity": 2,
+          "price": 150
+        },
+        {
+          "id": 3,
+          "name": "Família",
+          "capacity": 3,
+          "price": 200
+        }
       ],
       "location": "Rio de Janeiro",
       "address": "Rua Senador Dantas, 25",
@@ -78,9 +184,24 @@
       "id": 7,
       "name": "Rede Andrade Guanabara Hotel Centro",
       "rooms": [
-        { "id": 1, "name": "Solteiro", "capacity": 1, "price": 100 },
-        { "id": 2, "name": "Casal", "capacity": 2, "price": 150 },
-        { "id": 3, "name": "Família", "capacity": 3, "price": 200 }
+        {
+          "id": 1,
+          "name": "Solteiro",
+          "capacity": 1,
+          "price": 100
+        },
+        {
+          "id": 2,
+          "name": "Casal",
+          "capacity": 2,
+          "price": 150
+        },
+        {
+          "id": 3,
+          "name": "Família",
+          "capacity": 3,
+          "price": 200
+        }
       ],
       "location": "Rio de Janeiro",
       "address": "Av. Presidente Vargas, 392",
@@ -90,9 +211,24 @@
       "id": 8,
       "name": "Copacabana Palace Hotel",
       "rooms": [
-        { "id": 1, "name": "Solteiro", "capacity": 1, "price": 100 },
-        { "id": 2, "name": "Casal", "capacity": 2, "price": 150 },
-        { "id": 3, "name": "Família", "capacity": 3, "price": 200 }
+        {
+          "id": 1,
+          "name": "Solteiro",
+          "capacity": 1,
+          "price": 100
+        },
+        {
+          "id": 2,
+          "name": "Casal",
+          "capacity": 2,
+          "price": 150
+        },
+        {
+          "id": 3,
+          "name": "Família",
+          "capacity": 3,
+          "price": 200
+        }
       ],
       "location": "Rio de Janeiro",
       "address": "Av. Atlântica, 1702",
@@ -102,9 +238,24 @@
       "id": 9,
       "name": "Windsor Tower Hotel",
       "rooms": [
-        { "id": 1, "name": "Solteiro", "capacity": 1, "price": 100 },
-        { "id": 2, "name": "Casal", "capacity": 2, "price": 150 },
-        { "id": 3, "name": "Família", "capacity": 3, "price": 200 }
+        {
+          "id": 1,
+          "name": "Solteiro",
+          "capacity": 1,
+          "price": 100
+        },
+        {
+          "id": 2,
+          "name": "Casal",
+          "capacity": 2,
+          "price": 150
+        },
+        {
+          "id": 3,
+          "name": "Família",
+          "capacity": 3,
+          "price": 200
+        }
       ],
       "location": "Rio de Janeiro",
       "address": "Rua Barata Ribeiro, 263",
@@ -114,9 +265,24 @@
       "id": 10,
       "name": "Novo Vernon Express Hotel Curitiba",
       "rooms": [
-        { "id": 1, "name": "Solteiro", "capacity": 1, "price": 100 },
-        { "id": 2, "name": "Casal", "capacity": 2, "price": 150 },
-        { "id": 3, "name": "Família", "capacity": 3, "price": 200 }
+        {
+          "id": 1,
+          "name": "Solteiro",
+          "capacity": 1,
+          "price": 100
+        },
+        {
+          "id": 2,
+          "name": "Casal",
+          "capacity": 2,
+          "price": 150
+        },
+        {
+          "id": 3,
+          "name": "Família",
+          "capacity": 3,
+          "price": 200
+        }
       ],
       "location": "Curitiba",
       "address": "Rua Mariano Torres, 976",
@@ -126,9 +292,24 @@
       "id": 11,
       "name": "Mabu Curitiba Business",
       "rooms": [
-        { "id": 1, "name": "Solteiro", "capacity": 1, "price": 100 },
-        { "id": 2, "name": "Casal", "capacity": 2, "price": 150 },
-        { "id": 3, "name": "Família", "capacity": 3, "price": 200 }
+        {
+          "id": 1,
+          "name": "Solteiro",
+          "capacity": 1,
+          "price": 100
+        },
+        {
+          "id": 2,
+          "name": "Casal",
+          "capacity": 2,
+          "price": 150
+        },
+        {
+          "id": 3,
+          "name": "Família",
+          "capacity": 3,
+          "price": 200
+        }
       ],
       "location": "Curitiba",
       "address": "Rua XV de Novembro, 830",
@@ -138,13 +319,183 @@
       "id": 12,
       "name": "Hotel Del Rey Curitiba",
       "rooms": [
-        { "id": 1, "name": "Solteiro", "capacity": 1, "price": 100 },
-        { "id": 2, "name": "Casal", "capacity": 2, "price": 150 },
-        { "id": 3, "name": "Família", "capacity": 3, "price": 200 }
+        {
+          "id": 1,
+          "name": "Solteiro",
+          "capacity": 1,
+          "price": 100
+        },
+        {
+          "id": 2,
+          "name": "Casal",
+          "capacity": 2,
+          "price": 150
+        },
+        {
+          "id": 3,
+          "name": "Família",
+          "capacity": 3,
+          "price": 200
+        }
       ],
       "location": "Curitiba",
       "address": "Rua Desembargador Westphalen, 344",
       "stars": 4
+    }
+  ],
+  "shopping": [
+    {
+      "id": "c4c6",
+      "shopping": [
+        {
+          "user": {
+            "name": "arthur",
+            "email": "arthur.nox@gmail.com"
+          },
+          "item": {
+            "hotelName": "Gran Villagio Hotel",
+            "checkInDate": "2024-07-24T03:00:00.000Z",
+            "checkOutDate": "2024-07-25T03:00:00.000Z",
+            "roomsBooked": [
+              {
+                "roomId": 1,
+                "quantity": 2
+              },
+              {
+                "roomId": 2,
+                "quantity": 3
+              },
+              {
+                "roomId": 3,
+                "quantity": 1
+              }
+            ],
+            "guests": 2,
+            "paymentMethod": "Cartão de crédito"
+          }
+        }
+      ]
+    },
+    {
+      "id": "2733",
+      "shopping": [
+        {
+          "id": 1,
+          "user": {
+            "name": "dwdwd",
+            "email": "sefewfe@fefefef.com"
+          },
+          "item": {
+            "hotelName": "InterCity Premium Porto Alegre",
+            "checkInDate": "2024-07-23T03:00:00.000Z",
+            "checkOutDate": "2024-07-24T03:00:00.000Z",
+            "roomsBooked": [
+              {
+                "roomId": 2,
+                "quantity": 1
+              }
+            ],
+            "guests": 2,
+            "paymentMethod": "Pix"
+          }
+        }
+      ]
+    },
+    {
+      "id": "8596",
+      "shopping": [
+        {
+          "user": {
+            "name": "3123213213",
+            "email": "arthur.nox@asdasd.com"
+          },
+          "item": {
+            "hotelName": "InterCity Premium Porto Alegre",
+            "checkInDate": "2024-07-23T03:00:00.000Z",
+            "checkOutDate": "2024-07-27T03:00:00.000Z",
+            "roomsBooked": [
+              {
+                "roomId": 2,
+                "quantity": 1
+              }
+            ],
+            "guests": 2,
+            "paymentMethod": "Pix"
+          }
+        }
+      ]
+    },
+    {
+      "id": "7097",
+      "shopping": [
+        {
+          "user": {
+            "name": "dqdweqwe",
+            "email": "arthur@gasidasijd.com"
+          },
+          "item": {
+            "hotelName": "InterCity Premium Porto Alegre",
+            "checkInDate": "2024-07-23T03:00:00.000Z",
+            "checkOutDate": "2024-07-27T03:00:00.000Z",
+            "roomsBooked": [
+              {
+                "roomId": 1,
+                "quantity": 1
+              }
+            ],
+            "guests": 1,
+            "paymentMethod": "Depósito bancário"
+          }
+        }
+      ]
+    },
+    {
+      "id": "c535",
+      "shopping": [
+        {
+          "user": {
+            "name": "fwefef",
+            "email": "aere@ijij.com"
+          },
+          "item": {
+            "hotelName": "InterCity Premium Porto Alegre",
+            "checkInDate": "2024-07-23T03:00:00.000Z",
+            "checkOutDate": "2024-07-27T03:00:00.000Z",
+            "roomsBooked": [
+              {
+                "roomId": 2,
+                "quantity": 1
+              }
+            ],
+            "guests": 2,
+            "paymentMethod": "Depósito bancário"
+          }
+        }
+      ]
+    },
+    {
+      "id": "3a06",
+      "shopping": [
+        {
+          "user": {
+            "name": "eqerewrewr",
+            "email": "adfdsf@fdsfdsf.com"
+          },
+          "item": {
+            "hotelName": "Gran Villagio Hotel",
+            "checkInDate": "2024-07-23T03:00:00.000Z",
+            "checkOutDate": "2024-07-24T03:00:00.000Z",
+            "roomsBooked": [
+              {
+                "roomId": 2,
+                "quantity": 2
+              }
+            ],
+            "guests": 1,
+            "paymentMethod": "Pix"
+          }
+        }
+      ]
     }
   ]
 }
