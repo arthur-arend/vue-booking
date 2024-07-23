@@ -2,10 +2,10 @@
   <v-app>
     <v-main v-if="hotel">
       <v-container>
-        <v-row>
-          <v-col cols="12" md="6">
-            <v-card class="order__container">
-              <v-form ref="form" v-model="valid" @submit.prevent="onSubmit">
+        <v-form ref="form" v-model="valid" @submit.prevent="onSubmit">
+          <v-row>
+            <v-col cols="12" md="6">
+              <v-card class="order__container">
                 <v-card-title> Revisar Pedido </v-card-title>
                 <v-card-subtitle>Hotel: {{ hotel.name }}</v-card-subtitle>
                 <v-card-subtitle>Endereço: {{ hotel.address }}</v-card-subtitle>
@@ -47,65 +47,23 @@
                     </v-list-item>
                   </v-list>
                 </v-col>
-                <v-col cols="8" md="12">
-                  <v-text-field
-                    variant="outlined"
-                    v-model="formattedDates"
-                    :rules="dateRules"
-                    label="Período"
-                    type="text"
-                    readonly
-                    class="thin-text-field"
-                    ref="dateTextField"
-                  ></v-text-field>
-                  <v-menu
-                    v-model="menu"
-                    :close-on-content-click="false"
-                    transition="scale-transition"
-                    offset-y
-                    attach="#dateTextField"
-                    @click:outside="handleMenuClose"
-                  >
-                    <template v-slot:activator="{ props }">
-                      <v-btn v-bind="props" size="x-large" color="#201E43">
-                        <v-icon icon="mdi-calendar" start></v-icon>
-                      </v-btn>
-                    </template>
-                    <v-row>
-                      <v-col cols="12" md="6">
-                        <v-date-picker
-                          v-model="checkInDate"
-                          :min="today"
-                          elevation="24"
-                          title="Check-in"
-                          width="250px"
-                          min-width="250px"
-                          dense
-                        ></v-date-picker>
-                      </v-col>
-                      <v-col cols="12" md="6">
-                        <v-date-picker
-                          v-model="checkOutDate"
-                          :min="minCheckoutDate"
-                          elevation="24"
-                          title="Check-out"
-                          width="250px"
-                          min-width="250px"
-                          dense
-                        ></v-date-picker>
-                      </v-col>
-                    </v-row>
-                  </v-menu>
-                </v-col>
+                <DatePickerComponent
+                  :check-in-date="checkInDate"
+                  :check-out-date="checkOutDate"
+                  :today="today"
+                  :min-checkout-date="minCheckoutDate"
+                  :formatted-dates="formattedDates"
+                  :handle-menu-close="handleMenuClose"
+                  @update:checkInDate="updateCheckInDate"
+                  @update:checkOutDate="updateCheckOutDate"
+                />
                 <v-card-title class="order__container_totalValue">
-                  Total: R$ {{ total }}</v-card-title
-                >
-              </v-form>
-            </v-card>
-          </v-col>
-          <v-col cols="12" md="6">
-            <v-card>
-              <v-form ref="form" v-model="valid" @submit.prevent="onSubmit" class="user__container">
+                  Total: R$ {{ total }}
+                </v-card-title>
+              </v-card>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-card class="user__container">
                 <v-card-title> Dados Pessoais </v-card-title>
                 <v-col cols="12" md="12">
                   <v-text-field
@@ -134,10 +92,10 @@
                   ></v-select>
                 </v-col>
                 <v-btn color="#201E43" type="submit"> Reservar </v-btn>
-              </v-form>
-            </v-card>
-          </v-col>
-        </v-row>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-form>
         <v-snackbar v-model="snackbar" :timeout="snackbarTimeout" top>
           {{ snackbarMessage }}
           <v-btn color="red" @click="snackbar = false">Close</v-btn>
@@ -177,7 +135,8 @@ import {
   getEmailRules,
   getPaymentMethodRules
 } from '../utils/validationRules'
-import { getHotelById, makeReservation } from '../services/apiService' // Import the service functions
+import { getHotelById, makeReservation } from '../services/apiService'
+import DatePickerComponent from '../components/DatePickerComponent.vue'
 
 export default defineComponent({
   components: {
@@ -192,7 +151,8 @@ export default defineComponent({
     VTextField,
     VForm,
     VSelect,
-    VSnackbar
+    VSnackbar,
+    DatePickerComponent
   },
   setup() {
     const route = useRoute()
@@ -201,8 +161,8 @@ export default defineComponent({
     const filterValuesStore = useFilterValuesStore()
     const hotelsStore = useHotelsStore()
 
-    const form = ref<any>(null)
     const menu = ref(false)
+    const form = ref<any>(null)
     const valid = ref(false)
     const name = ref('')
     const email = ref('')
@@ -238,7 +198,7 @@ export default defineComponent({
       return ''
     })
 
-    const today = computed(() => {
+    const today = computed<string>(() => {
       const today = new Date()
       const yyyy = today.getFullYear()
       const mm = String(today.getMonth() + 1).padStart(2, '0')
@@ -246,8 +206,10 @@ export default defineComponent({
       return `${yyyy}-${mm}-${dd}`
     })
 
-    const minCheckoutDate = computed(() => {
-      return filterValuesStore.getCheckInDate || today.value
+    const minCheckoutDate = computed<string>(() => {
+      return filterValuesStore.getCheckInDate
+        ? formatDate(filterValuesStore.getCheckInDate)
+        : today.value
     })
 
     const incrementRoomCounter = (index: number) => {
@@ -275,37 +237,38 @@ export default defineComponent({
 
     const onSubmit = async () => {
       if (form.value.validate()) {
-        const payload = {
-          shopping: [
-            {
-              user: {
-                name: name.value,
-                email: email.value
-              },
-              item: {
-                hotelName: hotel.value?.name,
-                checkInDate: filterValuesStore.getCheckInDate,
-                checkOutDate: filterValuesStore.getCheckOutDate,
-                roomsBooked: Object.keys(selectedRooms.value).map((roomId) => ({
-                  roomId: parseInt(roomId),
-                  quantity: selectedRooms.value[roomId]
-                })),
-                guests: selectedGuests.value,
-                paymentMethod: paymentMethod.value
-              }
+        return
+      }
+      const payload = {
+        shopping: [
+          {
+            user: {
+              name: name.value,
+              email: email.value
+            },
+            item: {
+              hotelName: hotel.value?.name,
+              checkInDate: filterValuesStore.getCheckInDate,
+              checkOutDate: filterValuesStore.getCheckOutDate,
+              roomsBooked: Object.keys(selectedRooms.value).map((roomId) => ({
+                roomId: parseInt(roomId),
+                quantity: selectedRooms.value[roomId]
+              })),
+              guests: selectedGuests.value,
+              paymentMethod: paymentMethod.value
             }
-          ]
-        }
+          }
+        ]
+      }
 
-        try {
-          await makeReservation(payload)
-          snackbarMessage.value = 'Reserva realizada com sucesso!'
-          snackbar.value = true
-        } catch (error) {
-          console.error('Error:', error)
-          snackbarMessage.value = 'Erro ao realizar a reserva. Tente novamente.'
-          snackbar.value = true
-        }
+      try {
+        await makeReservation(payload)
+        snackbarMessage.value = 'Reserva realizada com sucesso!'
+        snackbar.value = true
+      } catch (error) {
+        console.error('Error:', error)
+        snackbarMessage.value = 'Erro ao realizar a reserva. Tente novamente.'
+        snackbar.value = true
       }
     }
 
@@ -370,6 +333,14 @@ export default defineComponent({
       }
     })
 
+    const updateCheckInDate = (date: Date) => {
+      filterValuesStore.setCheckInDate(date)
+    }
+
+    const updateCheckOutDate = (date: Date) => {
+      filterValuesStore.setCheckOutDate(date)
+    }
+
     return {
       hotel,
       valid,
@@ -393,12 +364,12 @@ export default defineComponent({
       handleMenuClose,
       minCheckoutDate,
       checkInDate: computed({
-        get: () => filterValuesStore.getCheckInDate,
-        set: (value: Date | null) => filterValuesStore.setCheckInDate(value)
+        get: () => filterValuesStore.getCheckInDate as Date,
+        set: (value: Date) => filterValuesStore.setCheckInDate(value)
       }),
       checkOutDate: computed({
-        get: () => filterValuesStore.getCheckOutDate,
-        set: (value: Date | null) => filterValuesStore.setCheckOutDate(value)
+        get: () => filterValuesStore.getCheckOutDate as Date,
+        set: (value: Date) => filterValuesStore.setCheckOutDate(value)
       }),
       dateRules,
       paymentMethod,
@@ -408,7 +379,9 @@ export default defineComponent({
       snackbar,
       snackbarMessage,
       snackbarTimeout,
-      formattedDates
+      formattedDates,
+      updateCheckInDate,
+      updateCheckOutDate
     }
   }
 })

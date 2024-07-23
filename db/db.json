@@ -636,6 +636,101 @@
           }
         }
       ]
+    },
+    {
+      "id": "ca9e",
+      "shopping": [
+        {
+          "user": {
+            "name": "",
+            "email": ""
+          },
+          "item": {
+            "hotelName": "Açores Palace Hotel",
+            "checkInDate": "2024-07-24T03:00:00.000Z",
+            "checkOutDate": "2024-07-26T03:00:00.000Z",
+            "roomsBooked": [],
+            "guests": 0,
+            "paymentMethod": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "7141",
+      "shopping": [
+        {
+          "user": {
+            "name": "",
+            "email": ""
+          },
+          "item": {
+            "hotelName": "Açores Palace Hotel",
+            "checkInDate": null,
+            "checkOutDate": null,
+            "roomsBooked": [],
+            "guests": 0,
+            "paymentMethod": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "4ce9",
+      "shopping": [
+        {
+          "user": {
+            "name": "",
+            "email": ""
+          },
+          "item": {
+            "hotelName": "Gran Villagio Hotel",
+            "checkInDate": null,
+            "checkOutDate": null,
+            "roomsBooked": [],
+            "guests": 0,
+            "paymentMethod": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "c09a",
+      "shopping": [
+        {
+          "user": {
+            "name": "",
+            "email": ""
+          },
+          "item": {
+            "hotelName": "Açores Palace Hotel",
+            "checkInDate": null,
+            "checkOutDate": null,
+            "roomsBooked": [],
+            "guests": 0,
+            "paymentMethod": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "c804",
+      "shopping": [
+        {
+          "user": {
+            "name": "",
+            "email": ""
+          },
+          "item": {
+            "hotelName": "Gran Villagio Hotel",
+            "checkInDate": null,
+            "checkOutDate": null,
+            "roomsBooked": [],
+            "guests": 0,
+            "paymentMethod": null
+          }
+        }
+      ]
     }
   ]
 }

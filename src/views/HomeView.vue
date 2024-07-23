@@ -28,48 +28,24 @@
           ></v-select>
         </v-col>
         <v-col cols="8" sm="4" md="3" class="search_date">
-          <v-text-field
-            variant="outlined"
-            v-model="formattedDates"
-            label="Período"
-            type="text"
-            readonly
-            class="thin-text-field"
-          ></v-text-field>
-          <v-menu
-            v-model:menu="menu"
-            :close-on-content-click="false"
-            transition="scale-transition"
-            offset-y
-            @click:outside="handleMenuClose"
-          >
-            <template v-slot:activator="{ props }">
-              <v-btn v-bind="props" size="x-large" color="#201E43">
-                <v-icon icon="mdi-calendar" start></v-icon>
-              </v-btn>
-            </template>
-            <v-row>
-              <v-col>
-                <v-date-picker
-                  v-model="checkInDate"
-                  :min="today"
-                  elevation="24"
-                  title="Check-in"
-                ></v-date-picker>
-              </v-col>
-              <v-col>
-                <v-date-picker
-                  v-model="checkOutDate"
-                  :min="minCheckoutDate"
-                  elevation="24"
-                  title="Check-out"
-                ></v-date-picker>
-              </v-col>
-            </v-row>
-          </v-menu>
+          <DatePickerComponent
+            :check-in-date="checkInDate"
+            :check-out-date="checkOutDate"
+            :today="today"
+            :min-checkout-date="minCheckoutDate"
+            :formatted-dates="formattedDates"
+            :handle-menu-close="handleMenuClose"
+            @update:checkInDate="updateCheckInDate"
+            @update:checkOutDate="updateCheckOutDate"
+          />
         </v-col>
         <v-col cols="8" md="2" class="search_cta">
-          <v-btn class="search__cta" size="x-large" color="#201E43" @click="handleClick"
+          <v-btn
+            class="search__cta"
+            size="x-large"
+            color="#201E43"
+            @click="handleClick"
+            :disabled="!selectedCity"
             >Pesquisar</v-btn
           >
         </v-col>
@@ -94,13 +70,14 @@
 
 <script lang="ts">
 import { defineComponent, computed, ref, onMounted } from 'vue'
-import { VApp, VMain, VBtn, VSelect, VMenu, VDatePicker, VTextField } from 'vuetify/components'
+import { VApp, VMain, VBtn, VSelect } from 'vuetify/components'
 import { useFilterValuesStore } from '../stores/filterValues'
 import { useHotelsStore } from '../stores/hotelsStore'
 import type { Hotel } from '../interfaces/hotels/hotels.model'
 import { formatDate } from '../utils/date-time'
-import HotelCard from '../components/Card/HotelCard.vue'
-import { fetchCities, fetchHotels } from '../services/apiService' // Import the service functions
+import HotelCard from '../components/HotelCard.vue'
+import DatePickerComponent from '../components/DatePickerComponent.vue'
+import { fetchCities, fetchHotels } from '../services/apiService'
 
 export default defineComponent({
   components: {
@@ -108,29 +85,22 @@ export default defineComponent({
     VMain,
     VBtn,
     VSelect,
-    VMenu,
-    VDatePicker,
-    VTextField,
-    HotelCard
+    HotelCard,
+    DatePickerComponent
   },
   setup() {
     const filterValuesStore = useFilterValuesStore()
     const hotelsStore = useHotelsStore()
     const cities = ref<{ id: number; name: string }[]>([])
     const menu = ref(false)
-
     const selectedCity = computed({
       get: () => filterValuesStore.getSelectedCity,
       set: (value: string | null) => filterValuesStore.setSelectedCity(value)
     })
 
-    const minCheckoutDate = computed(() => {
-      return filterValuesStore.getCheckInDate || today.value
-    })
-
     const hotels = computed(() => hotelsStore.hotels)
 
-    const today = computed(() => {
+    const today = computed<string>(() => {
       const today = new Date()
       const yyyy = today.getFullYear()
       const mm = String(today.getMonth() + 1).padStart(2, '0')
@@ -138,25 +108,31 @@ export default defineComponent({
       return `${yyyy}-${mm}-${dd}`
     })
 
-    const cityNames = computed(() => cities.value.map((city) => city.name))
-
-    const formattedDates = computed(() => {
-      if (filterValuesStore.getCheckInDate && filterValuesStore.getCheckOutDate) {
-        return `${formatDate(filterValuesStore.getCheckInDate)} até ${formatDate(filterValuesStore.getCheckOutDate)}`
-      }
-      return ''
+    const minCheckoutDate = computed<string>(() => {
+      return filterValuesStore.getCheckInDate
+        ? formatDate(filterValuesStore.getCheckInDate)
+        : today.value
     })
 
     const loadCities = async () => {
       cities.value = await fetchCities()
     }
 
+    onMounted(() => {
+      loadCities()
+    })
+
+    const cityNames = computed(() => cities.value.map((city) => city.name))
+
     const sortHotelsByStars = () => {
       hotelsStore.hotels = [...hotelsStore.hotels].sort((a, b) => b.stars - a.stars)
     }
 
-    onMounted(() => {
-      loadCities()
+    const formattedDates = computed(() => {
+      if (filterValuesStore.getCheckInDate && filterValuesStore.getCheckOutDate) {
+        return `${formatDate(filterValuesStore.getCheckInDate)} até ${formatDate(filterValuesStore.getCheckOutDate)}`
+      }
+      return ''
     })
 
     const handleMenuClose = () => {
@@ -188,6 +164,14 @@ export default defineComponent({
       }
     }
 
+    const updateCheckInDate = (date: Date) => {
+      filterValuesStore.setCheckInDate(date)
+    }
+
+    const updateCheckOutDate = (date: Date) => {
+      filterValuesStore.setCheckOutDate(date)
+    }
+
     return {
       cities,
       cityNames,
@@ -204,18 +188,20 @@ export default defineComponent({
         set: (value: number | null) => filterValuesStore.setSelectedRooms(value)
       }),
       checkInDate: computed({
-        get: () => filterValuesStore.getCheckInDate,
-        set: (value: Date | null) => filterValuesStore.setCheckInDate(value)
+        get: () => filterValuesStore.getCheckInDate as Date,
+        set: (value: Date) => filterValuesStore.setCheckInDate(value)
       }),
       checkOutDate: computed({
-        get: () => filterValuesStore.getCheckOutDate,
-        set: (value: Date | null) => filterValuesStore.setCheckOutDate(value)
+        get: () => filterValuesStore.getCheckOutDate as Date,
+        set: (value: Date) => filterValuesStore.setCheckOutDate(value)
       }),
       formattedDates,
       minCheckoutDate,
       handleClick,
       sortHotelsByStars,
-      handleMenuClose
+      handleMenuClose,
+      updateCheckInDate,
+      updateCheckOutDate
     }
   }
 })
@@ -236,10 +222,6 @@ export default defineComponent({
     padding: 0;
     display: flex;
     justify-content: center;
-
-    .v-btn.v-btn--density-default {
-      height: 55px;
-    }
   }
 
   .search_cta {
