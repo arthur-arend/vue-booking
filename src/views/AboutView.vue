@@ -165,6 +165,15 @@ import { formatDate } from '../utils/date-time'
 import { useFilterValuesStore } from '../stores/filterValues'
 import { useHotelsStore } from '../stores/hotelsStore'
 
+import {
+  getRoomRules,
+  getNameRules,
+  getSelectedGuestsRules,
+  getDateRules,
+  getEmailRules,
+  getPaymentMethodRules
+} from '../utils/validationRules'
+
 export default defineComponent({
   components: {
     VApp,
@@ -196,74 +205,22 @@ export default defineComponent({
     const selectedGuests = ref<number>(filterValuesStore.getSelectedGuests || 0)
     const selectedRooms = ref<{ [key: string]: number }>({})
     const paymentMethod = ref<string | null>(null)
+    const roomCounters = ref<number[]>([])
 
     const snackbar = ref(false)
     const snackbarMessage = ref('')
     const snackbarTimeout = ref(5000)
 
-    const nameRules = [
-      (value: string) => {
-        if (value) return true
-
-        return 'Nome é obrigatório.'
-      }
-    ]
-
-    const selectedGuestsRules = [
-      (value: number) => {
-        if (value > 0) return true
-
-        return 'Número de hóspedes é obrigatório.'
-      },
-      () => {
-        const totalCapacity = Object.keys(selectedRooms.value).reduce((total, roomId) => {
-          const room = hotel.value?.rooms.find((r) => r.id.toString() === roomId.toString())
-          if (room) {
-            return total + room.capacity * selectedRooms.value[roomId]
-          }
-          return total
-        }, 0)
-        if (selectedGuests.value <= totalCapacity) return true
-
-        return 'Número de hóspedes excede a capacidade dos quartos selecionados.'
-      }
-    ]
-
-    const formattedDates = computed(() => {
-      if (filterValuesStore.getCheckInDate && filterValuesStore.getCheckOutDate) {
-        return `${formatDate(filterValuesStore.getCheckInDate)} até ${formatDate(filterValuesStore.getCheckOutDate)}`
-      }
-      return ''
+    const roomSelectionValid = computed(() => {
+      return Object.keys(selectedRooms.value).length > 0
     })
 
-    const dateRules = [
-      (value: string) => {
-        if (value) return true
-
-        return 'Período é obrigatório.'
-      }
-    ]
-
-    const emailRules = [
-      (value: string) => {
-        if (value) return true
-
-        return 'E-mail é obrigatório.'
-      },
-      (value: string) => {
-        if (/.+@.+\..+/.test(value)) return true
-
-        return 'E-mail deve ser válido.'
-      }
-    ]
-
-    const paymentMethodRules = [
-      (value: string) => {
-        if (value) return true
-
-        return 'Meio de pagamento é obrigatório.'
-      }
-    ]
+    const roomRules = getRoomRules(roomSelectionValid)
+    const nameRules = getNameRules()
+    const selectedGuestsRules = getSelectedGuestsRules(selectedGuests, selectedRooms, hotel)
+    const dateRules = getDateRules()
+    const emailRules = getEmailRules()
+    const paymentMethodRules = getPaymentMethodRules()
 
     const fetchHotel = async () => {
       try {
@@ -279,6 +236,13 @@ export default defineComponent({
       }
     }
 
+    const formattedDates = computed(() => {
+      if (filterValuesStore.getCheckInDate && filterValuesStore.getCheckOutDate) {
+        return `${formatDate(filterValuesStore.getCheckInDate)} até ${formatDate(filterValuesStore.getCheckOutDate)}`
+      }
+      return ''
+    })
+
     const today = computed(() => {
       const today = new Date()
       const yyyy = today.getFullYear()
@@ -290,8 +254,6 @@ export default defineComponent({
     const minCheckoutDate = computed(() => {
       return filterValuesStore.getCheckInDate || today.value
     })
-
-    const roomCounters = ref<number[]>([])
 
     const incrementRoomCounter = (index: number) => {
       const roomId = hotel.value?.rooms[index].id
@@ -311,17 +273,6 @@ export default defineComponent({
         roomCounters.value[index] = selectedRooms.value[roomId] || 0
       }
     }
-
-    const roomSelectionValid = computed(() => {
-      return Object.keys(selectedRooms.value).length > 0
-    })
-
-    const roomRules = [
-      () => {
-        if (roomSelectionValid.value) return true
-        return 'Selecione ao menos um quarto.'
-      }
-    ]
 
     const handleMenuClose = () => {
       menu.value = false
@@ -353,7 +304,6 @@ export default defineComponent({
 
         try {
           const response = await axios.post('http://localhost:3001/shopping/', payload)
-          console.log('Success:', response.data)
           snackbarMessage.value = 'Reserva realizada com sucesso!'
           snackbar.value = true
         } catch (error) {
@@ -455,7 +405,6 @@ export default defineComponent({
         get: () => filterValuesStore.getCheckOutDate,
         set: (value: Date | null) => filterValuesStore.setCheckOutDate(value)
       }),
-      formattedDates,
       dateRules,
       paymentMethod,
       paymentMethodRules,
@@ -463,15 +412,14 @@ export default defineComponent({
       total,
       snackbar,
       snackbarMessage,
-      snackbarTimeout
+      snackbarTimeout,
+      formattedDates
     }
   }
 })
 </script>
 
 <style lang="scss">
-.order__container {
-}
 .user__container {
   display: flex;
   flex-direction: column;

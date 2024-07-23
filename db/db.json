@@ -496,6 +496,90 @@
           }
         }
       ]
+    },
+    {
+      "id": "813a",
+      "shopping": [
+        {
+          "user": {
+            "name": "",
+            "email": ""
+          },
+          "item": {
+            "hotelName": "Açores Palace Hotel",
+            "checkInDate": null,
+            "checkOutDate": null,
+            "roomsBooked": [
+              {
+                "roomId": 1,
+                "quantity": 1
+              },
+              {
+                "roomId": 2,
+                "quantity": 1
+              }
+            ],
+            "guests": 1,
+            "paymentMethod": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "61e0",
+      "shopping": [
+        {
+          "user": {
+            "name": "",
+            "email": ""
+          },
+          "item": {
+            "hotelName": "Açores Palace Hotel",
+            "checkInDate": "2024-07-23T03:00:00.000Z",
+            "checkOutDate": "2024-07-24T03:00:00.000Z",
+            "roomsBooked": [
+              {
+                "roomId": 1,
+                "quantity": 1
+              }
+            ],
+            "guests": 1,
+            "paymentMethod": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "896d",
+      "shopping": [
+        {
+          "user": {
+            "name": "",
+            "email": ""
+          },
+          "item": {
+            "hotelName": "Açores Palace Hotel",
+            "checkInDate": "2024-07-24T03:00:00.000Z",
+            "checkOutDate": "2024-07-27T03:00:00.000Z",
+            "roomsBooked": [
+              {
+                "roomId": 1,
+                "quantity": 1
+              },
+              {
+                "roomId": 2,
+                "quantity": 1
+              },
+              {
+                "roomId": 3,
+                "quantity": 1
+              }
+            ],
+            "guests": 1,
+            "paymentMethod": null
+          }
+        }
+      ]
     }
   ]
 }
