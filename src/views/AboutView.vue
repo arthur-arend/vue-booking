@@ -72,20 +72,26 @@
                       </v-btn>
                     </template>
                     <v-row>
-                      <v-col>
+                      <v-col cols="12" md="6">
                         <v-date-picker
                           v-model="checkInDate"
                           :min="today"
                           elevation="24"
                           title="Check-in"
+                          width="250px"
+                          min-width="250px"
+                          dense
                         ></v-date-picker>
                       </v-col>
-                      <v-col>
+                      <v-col cols="12" md="6">
                         <v-date-picker
                           v-model="checkOutDate"
                           :min="minCheckoutDate"
                           elevation="24"
                           title="Check-out"
+                          width="250px"
+                          min-width="250px"
+                          dense
                         ></v-date-picker>
                       </v-col>
                     </v-row>
