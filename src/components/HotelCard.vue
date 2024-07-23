@@ -34,7 +34,7 @@
 <script setup lang="ts">
 import { defineProps, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import type { Hotel } from '../../interfaces/hotels/hotels.model'
+import type { Hotel } from '../interfaces/hotels/hotels.model'
 
 const props = defineProps<{ hotel: Hotel }>()
 
