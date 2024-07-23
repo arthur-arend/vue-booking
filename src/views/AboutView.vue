@@ -1,130 +1,142 @@
 <template>
   <v-app>
     <v-main v-if="hotel">
-      <v-card>
-        <v-form ref="form" v-model="valid" @submit.prevent="onSubmit">
-          <v-card-title> Revisar Pedido </v-card-title>
-          <v-card-subtitle>Hotel: {{ hotel.name }}</v-card-subtitle>
-          <v-card-subtitle>Endereço: {{ hotel.address }}</v-card-subtitle>
-          <v-col cols="8" md="3">
-            <v-text-field
-              v-model="selectedGuests"
-              :rules="selectedGuestsRules"
-              label="Hóspedes"
-              required
-              append-inner-icon="mdi-plus"
-              @click:append-inner="incrementCounter"
-              prepend-inner-icon="mdi-minus"
-              @click:prepend-inner="deductCounter"
-            >
-            </v-text-field>
-          </v-col>
-          <v-col cols="8" md="4">
-            <v-card-subtitle>Quartos</v-card-subtitle>
-            <v-list lines="one">
-              <v-list-item
-                v-for="(room, index) in hotel.rooms"
-                :key="room.id"
-                :title="room.name"
-                :subtitle="formatRoomDetails(room)"
-                class="room-list-item"
-              >
-                <template v-slot:append>
+      <v-container>
+        <v-row>
+          <v-col cols="12" md="6">
+            <v-card class="order__container">
+              <v-form ref="form" v-model="valid" @submit.prevent="onSubmit">
+                <v-card-title> Revisar Pedido </v-card-title>
+                <v-card-subtitle>Hotel: {{ hotel.name }}</v-card-subtitle>
+                <v-card-subtitle>Endereço: {{ hotel.address }}</v-card-subtitle>
+                <v-col cols="8" md="12">
                   <v-text-field
-                    v-model="roomCounters[index]"
-                    type="number"
-                    class="room-counter"
-                    dense
-                    :rules="roomRules"
-                    prepend-inner-icon="mdi-minus"
-                    @click:prepend-inner="decrementRoomCounter(index)"
+                    v-model="selectedGuests"
+                    :rules="selectedGuestsRules"
+                    label="Hóspedes"
+                    required
                     append-inner-icon="mdi-plus"
-                    @click:append-inner="incrementRoomCounter(index)"
+                    @click:append-inner="incrementCounter"
+                    prepend-inner-icon="mdi-minus"
+                    @click:prepend-inner="deductCounter"
                   ></v-text-field>
-                </template>
-              </v-list-item>
-            </v-list>
-          </v-col>
-          <v-col cols="8" md="2">
-            <v-text-field
-              variant="outlined"
-              v-model="formattedDates"
-              :rules="dateRules"
-              label="Período"
-              type="text"
-              readonly
-              class="thin-text-field"
-              ref="dateTextField"
-            ></v-text-field>
-            <v-menu
-              v-model="menu"
-              :close-on-content-click="false"
-              transition="scale-transition"
-              offset-y
-              attach="#dateTextField"
-              @click:outside="handleMenuClose"
-            >
-              <template v-slot:activator="{ props }">
-                <v-btn v-bind="props" size="x-large" color="#201E43">
-                  <v-icon icon="mdi-calendar" start></v-icon>
-                </v-btn>
-              </template>
-              <v-row>
-                <v-col>
-                  <v-date-picker
-                    v-model="checkInDate"
-                    :min="today"
-                    elevation="24"
-                    title="Check-in"
-                  ></v-date-picker>
                 </v-col>
-                <v-col>
-                  <v-date-picker
-                    v-model="checkOutDate"
-                    :min="minCheckoutDate"
-                    elevation="24"
-                    title="Check-out"
-                  ></v-date-picker>
+                <v-col cols="8" md="12">
+                  <v-card-subtitle>Quartos</v-card-subtitle>
+                  <v-list lines="one">
+                    <v-list-item
+                      v-for="(room, index) in hotel.rooms"
+                      :key="room.id"
+                      :title="room.name"
+                      :subtitle="formatRoomDetails(room)"
+                      class="room-list-item"
+                    >
+                      <template v-slot:append>
+                        <v-text-field
+                          v-model="roomCounters[index]"
+                          type="number"
+                          class="room-counter"
+                          dense
+                          :rules="roomRules"
+                          prepend-inner-icon="mdi-minus"
+                          @click:prepend-inner="decrementRoomCounter(index)"
+                          append-inner-icon="mdi-plus"
+                          @click:append-inner="incrementRoomCounter(index)"
+                        ></v-text-field>
+                      </template>
+                    </v-list-item>
+                  </v-list>
                 </v-col>
-              </v-row>
-            </v-menu>
+                <v-col cols="8" md="12">
+                  <v-text-field
+                    variant="outlined"
+                    v-model="formattedDates"
+                    :rules="dateRules"
+                    label="Período"
+                    type="text"
+                    readonly
+                    class="thin-text-field"
+                    ref="dateTextField"
+                  ></v-text-field>
+                  <v-menu
+                    v-model="menu"
+                    :close-on-content-click="false"
+                    transition="scale-transition"
+                    offset-y
+                    attach="#dateTextField"
+                    @click:outside="handleMenuClose"
+                  >
+                    <template v-slot:activator="{ props }">
+                      <v-btn v-bind="props" size="x-large" color="#201E43">
+                        <v-icon icon="mdi-calendar" start></v-icon>
+                      </v-btn>
+                    </template>
+                    <v-row>
+                      <v-col>
+                        <v-date-picker
+                          v-model="checkInDate"
+                          :min="today"
+                          elevation="24"
+                          title="Check-in"
+                        ></v-date-picker>
+                      </v-col>
+                      <v-col>
+                        <v-date-picker
+                          v-model="checkOutDate"
+                          :min="minCheckoutDate"
+                          elevation="24"
+                          title="Check-out"
+                        ></v-date-picker>
+                      </v-col>
+                    </v-row>
+                  </v-menu>
+                </v-col>
+                <v-card-title class="order__container_totalValue">
+                  Total: R$ {{ total }}</v-card-title
+                >
+              </v-form>
+            </v-card>
           </v-col>
-          <v-card-title> Total: R$ {{ total }}</v-card-title>
-          <v-card-title> Dados Pessoais </v-card-title>
-
-          <v-col cols="12" md="4">
-            <v-text-field
-              v-model="name"
-              :counter="10"
-              :rules="nameRules"
-              label="Nome Completo"
-              required
-            ></v-text-field>
+          <v-col cols="12" md="6">
+            <v-card>
+              <v-form ref="form" v-model="valid" @submit.prevent="onSubmit" class="user__container">
+                <v-card-title> Dados Pessoais </v-card-title>
+                <v-col cols="12" md="12">
+                  <v-text-field
+                    v-model="name"
+                    :counter="10"
+                    :rules="nameRules"
+                    label="Nome Completo"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" md="12">
+                  <v-text-field
+                    v-model="email"
+                    :rules="emailRules"
+                    label="E-mail"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" md="12">
+                  <v-select
+                    :items="['Cartão de crédito', 'Depósito bancário', 'Pix']"
+                    v-model="paymentMethod"
+                    :rules="paymentMethodRules"
+                    label="Meio de pagamento"
+                    required
+                  ></v-select>
+                </v-col>
+                <v-btn color="#201E43" type="submit"> Reservar </v-btn>
+              </v-form>
+            </v-card>
           </v-col>
-          <v-col cols="12" md="4">
-            <v-text-field
-              v-model="email"
-              :rules="emailRules"
-              label="E-mail"
-              required
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12" md="4">
-            <v-select
-              :items="['Cartão de crédito', 'Depósito bancário', 'Pix']"
-              v-model="paymentMethod"
-              :rules="paymentMethodRules"
-              label="Meio de pagamento"
-              required
-            ></v-select>
-          </v-col>
-          <v-btn color="#201E43" type="submit"> Reservar </v-btn>
-        </v-form>
-      </v-card>
-      <v-snackbar v-model="snackbar" :timeout="snackbarTimeout" top>
-        {{ snackbarMessage }}
-        <v-btn color="red" @click="snackbar = false">Close</v-btn>
-      </v-snackbar>
+        </v-row>
+        <v-snackbar v-model="snackbar" :timeout="snackbarTimeout" top>
+          {{ snackbarMessage }}
+          <v-btn color="red" @click="snackbar = false">Close</v-btn>
+        </v-snackbar>
+      </v-container>
     </v-main>
   </v-app>
 </template>
@@ -457,4 +469,12 @@ export default defineComponent({
 })
 </script>
 
-<style scss module></style>
+<style lang="scss">
+.order__container {
+}
+.user__container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+}
+</style>

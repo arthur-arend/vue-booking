@@ -68,13 +68,13 @@
             </v-row>
           </v-menu>
         </v-col>
-        <v-col cols="12" sm="12" md="2" class="search_cta">
+        <v-col cols="8" md="2" class="search_cta">
           <v-btn class="search__cta" size="x-large" color="#201E43" @click="handleClick"
             >Pesquisar</v-btn
           >
         </v-col>
       </v-row>
-      <v-container v-if="hotels.length !== 0" class="container_info">
+      <v-row v-if="hotels.length !== 0" class="container_info">
         <v-btn
           @click="sortHotelsByStars"
           size="x-large"
@@ -82,38 +82,33 @@
           class="container_info__button"
           >Ordenar</v-btn
         >
-        <v-row>
-          <HotelCard v-for="hotel in hotels" :key="hotel.id" :hotel="hotel" />
-        </v-row>
-      </v-container>
+        <v-col cols="12">
+          <div class="card-wrapper">
+            <HotelCard v-for="hotel in hotels" :key="hotel.id" :hotel="hotel" />
+          </div>
+        </v-col>
+      </v-row>
     </v-main>
   </v-app>
 </template>
 
 <script lang="ts">
 import { defineComponent, computed, ref, onMounted } from 'vue'
+import { VApp, VMain, VBtn, VSelect, VMenu, VDatePicker, VTextField } from 'vuetify/components'
+import axios from 'axios'
+
 import { useFilterValuesStore } from '../stores/filterValues'
 import { useHotelsStore } from '../stores/hotelsStore'
-import {
-  VApp,
-  VMain,
-  VContainer,
-  VBtn,
-  VSelect,
-  VMenu,
-  VDatePicker,
-  VTextField
-} from 'vuetify/components'
-import axios from 'axios'
+
 import type { Hotel } from '../interfaces/hotels/hotels.model'
 import { formatDate } from '../utils/date-time'
+
 import HotelCard from '../components/Card/HotelCard.vue'
 
 export default defineComponent({
   components: {
     VApp,
     VMain,
-    VContainer,
     VBtn,
     VSelect,
     VMenu,
@@ -270,19 +265,41 @@ export default defineComponent({
   width: 100%;
   height: auto;
   padding: 0 0 2rem 1rem;
-
   margin-top: 1rem;
   display: flex;
   align-items: flex-start;
   justify-content: center;
   flex-direction: column;
+}
 
-  .container_info__button {
-    align-self: flex-end;
+.card-wrapper {
+  width: 100%;
+}
+
+.card_container {
+  width: 100%;
+  margin-bottom: 1rem;
+
+  .card_container__title {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    align-items: center;
   }
+}
 
-  v-row {
-    width: 100%;
+.v-card {
+  box-shadow: none;
+  width: 100%;
+}
+
+/* Media queries */
+@media (max-width: 600px) {
+  .card_container {
+    .card_container__title {
+      flex-direction: column;
+      gap: 1rem;
+    }
   }
 }
 </style>
