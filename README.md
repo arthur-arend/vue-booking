@@ -1,35 +1,23 @@
 # booking
 
-This template should help get you started developing with Vue 3 in Vite.
+Aplicação desenvolvida com Vue 3, Vuetify, Pinia, Vue Router e typescript .
 
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
+## Configuração do Projeto
 
 ```sh
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+### Para compilar e Rodar o Projeto localmente
 
 ```sh
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+### Para rodar o Mock da api feita com Json-Server
 
 ```sh
-npm run build
+npm run backend
 ```
 
 ### Run Unit Tests with [Vitest](https://vitest.dev/)
@@ -43,3 +31,17 @@ npm run test:unit
 ```sh
 npm run lint
 ```
+
+## Escolhas de design e arquitetura
+
+O foco do projeto foi apresentar um comportamento o mais próximo possível de uma aplicação real, levando em conta as limitações de não ter um back-end. Não acredito que aplicar tantas regras de negócio no front-end seja ideal, mas foi necessário para simular um ambiente real.
+
+As chamadas foram feitas para manter a consistência dos dados. A primeira, retornando apenas as cidades, foi para simular um comportamento comum em sites de hotéis, onde o campo apresenta uma lista com destinos populares. Isso também ajudou a limitar o comportamento do usuário sem causar fricção ao tentar executar uma tarefa. Por esse motivo, na segunda tela, já disponibilizei um controle maior de personalização ao usuário.
+
+O Pinia foi usado para manter o estado entre as telas, permitindo que o usuário navegue sem ter que pesquisar novamente as informações.
+
+Optei por focar mais em apresentar uma aplicação funcional, em vez de uma estilização mais elaborada, mas mantive a ideia de responsividade em toda a aplicação.
+
+Organizei o código separando funções e componentes que usei ou poderia usar em mais de um lugar. Poderia componentizar ainda mais, mas o objetivo é manter os prazos de entrega combinados.
+
+Obrigado.
