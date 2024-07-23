@@ -34,7 +34,7 @@ npm run lint
 
 ## Escolhas de design e arquitetura
 
-O foco do projeto foi apresentar um comportamento o mais próximo possível de uma aplicação real, levando em conta as limitações de não ter um back-end. Não acredito que aplicar tantas regras de negócio no front-end seja ideal, mas foi necessário para simular um ambiente real.
+O foco do projeto foi apresentar um comportamento o mais próximo possível de uma aplicação real, levando em conta as limitações de não ter um back-end. Não acredito que aplicar tantas regras de negócio no front-end seja ideal, mas foi necessário para simular um ambiente real e demonstrar a capacidade de trabalhar tratando dados complexos.
 
 As chamadas foram feitas para manter a consistência dos dados. A primeira, retornando apenas as cidades, foi para simular um comportamento comum em sites de hotéis, onde o campo apresenta uma lista com destinos populares. Isso também ajudou a limitar o comportamento do usuário sem causar fricção ao tentar executar uma tarefa. Por esse motivo, na segunda tela, já disponibilizei um controle maior de personalização ao usuário.
 
