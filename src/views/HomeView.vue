@@ -95,15 +95,12 @@
 <script lang="ts">
 import { defineComponent, computed, ref, onMounted } from 'vue'
 import { VApp, VMain, VBtn, VSelect, VMenu, VDatePicker, VTextField } from 'vuetify/components'
-import axios from 'axios'
-
 import { useFilterValuesStore } from '../stores/filterValues'
 import { useHotelsStore } from '../stores/hotelsStore'
-
 import type { Hotel } from '../interfaces/hotels/hotels.model'
 import { formatDate } from '../utils/date-time'
-
 import HotelCard from '../components/Card/HotelCard.vue'
+import { fetchCities, fetchHotels } from '../services/apiService' // Import the service functions
 
 export default defineComponent({
   components: {
@@ -121,9 +118,14 @@ export default defineComponent({
     const hotelsStore = useHotelsStore()
     const cities = ref<{ id: number; name: string }[]>([])
     const menu = ref(false)
+
     const selectedCity = computed({
       get: () => filterValuesStore.getSelectedCity,
       set: (value: string | null) => filterValuesStore.setSelectedCity(value)
+    })
+
+    const minCheckoutDate = computed(() => {
+      return filterValuesStore.getCheckInDate || today.value
     })
 
     const hotels = computed(() => hotelsStore.hotels)
@@ -136,34 +138,25 @@ export default defineComponent({
       return `${yyyy}-${mm}-${dd}`
     })
 
-    const minCheckoutDate = computed(() => {
-      return filterValuesStore.getCheckInDate || today.value
-    })
-
-    const fetchCities = async () => {
-      try {
-        const response = await axios.get('http://localhost:3001/cities')
-        cities.value = response.data
-      } catch (error) {
-        console.log(error)
-      }
-    }
-
-    onMounted(() => {
-      fetchCities()
-    })
-
     const cityNames = computed(() => cities.value.map((city) => city.name))
-
-    const sortHotelsByStars = () => {
-      hotelsStore.hotels = [...hotelsStore.hotels].sort((a, b) => b.stars - a.stars)
-    }
 
     const formattedDates = computed(() => {
       if (filterValuesStore.getCheckInDate && filterValuesStore.getCheckOutDate) {
         return `${formatDate(filterValuesStore.getCheckInDate)} até ${formatDate(filterValuesStore.getCheckOutDate)}`
       }
       return ''
+    })
+
+    const loadCities = async () => {
+      cities.value = await fetchCities()
+    }
+
+    const sortHotelsByStars = () => {
+      hotelsStore.hotels = [...hotelsStore.hotels].sort((a, b) => b.stars - a.stars)
+    }
+
+    onMounted(() => {
+      loadCities()
     })
 
     const handleMenuClose = () => {
@@ -184,11 +177,9 @@ export default defineComponent({
 
     const handleClick = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/hotels', {
-          params: { location: selectedCity.value }
-        })
+        const response = await fetchHotels(selectedCity.value)
         const filteredHotels = filterRoomsByCapacity(
-          response.data,
+          response,
           filterValuesStore.getSelectedGuests || 0
         )
         hotelsStore.setHotels(filteredHotels)

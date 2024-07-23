@@ -47,7 +47,7 @@
     },
     {
       "id": 2,
-      "name": "InterCity Premium Porto Alegre",
+      "name": "InterCity Premium",
       "rooms": [
         {
           "id": 1,
@@ -74,7 +74,7 @@
     },
     {
       "id": 3,
-      "name": "Plaza São Rafael Hotel e Centro de Eventos",
+      "name": "Plaza São Rafael",
       "rooms": [
         {
           "id": 1,
@@ -128,7 +128,7 @@
     },
     {
       "id": 5,
-      "name": "San Raphael Hotel Guarulhos Airport",
+      "name": "San Raphael",
       "rooms": [
         {
           "id": 1,
@@ -155,7 +155,7 @@
     },
     {
       "id": 6,
-      "name": "Hotel Atlantico Business Centro",
+      "name": "Hotel Atlântico",
       "rooms": [
         {
           "id": 1,
@@ -182,7 +182,7 @@
     },
     {
       "id": 7,
-      "name": "Rede Andrade Guanabara Hotel Centro",
+      "name": "Rede Andrade",
       "rooms": [
         {
           "id": 1,
@@ -209,7 +209,7 @@
     },
     {
       "id": 8,
-      "name": "Copacabana Palace Hotel",
+      "name": "Copacabana Palace",
       "rooms": [
         {
           "id": 1,
@@ -263,7 +263,7 @@
     },
     {
       "id": 10,
-      "name": "Novo Vernon Express Hotel Curitiba",
+      "name": "Vernon Express",
       "rooms": [
         {
           "id": 1,
@@ -317,7 +317,7 @@
     },
     {
       "id": 12,
-      "name": "Hotel Del Rey Curitiba",
+      "name": "Hotel Del Rey",
       "rooms": [
         {
           "id": 1,
@@ -577,6 +577,62 @@
             ],
             "guests": 1,
             "paymentMethod": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "b509",
+      "shopping": [
+        {
+          "user": {
+            "name": "",
+            "email": ""
+          },
+          "item": {
+            "hotelName": "Gran Villagio Hotel",
+            "checkInDate": null,
+            "checkOutDate": null,
+            "roomsBooked": [
+              {
+                "roomId": 1,
+                "quantity": 2
+              },
+              {
+                "roomId": 2,
+                "quantity": 1
+              },
+              {
+                "roomId": 3,
+                "quantity": 1
+              }
+            ],
+            "guests": 1,
+            "paymentMethod": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "a471",
+      "shopping": [
+        {
+          "user": {
+            "name": "awew",
+            "email": "aeef@casd.com"
+          },
+          "item": {
+            "hotelName": "Açores Palace Hotel",
+            "checkInDate": "2024-07-24T03:00:00.000Z",
+            "checkOutDate": "2024-07-25T03:00:00.000Z",
+            "roomsBooked": [
+              {
+                "roomId": 1,
+                "quantity": 1
+              }
+            ],
+            "guests": 1,
+            "paymentMethod": "Cartão de crédito"
           }
         }
       ]

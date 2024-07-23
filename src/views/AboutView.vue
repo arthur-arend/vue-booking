@@ -149,8 +149,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted, computed, watch } from 'vue'
-import axios from 'axios'
-import { useRoute, useRouter } from 'vue-router'
+import type { Hotel } from '../interfaces/hotels/hotels.model'
 import {
   VApp,
   VMain,
@@ -165,12 +164,11 @@ import {
   VSelect,
   VSnackbar
 } from 'vuetify/components'
-import type { Hotel } from '../interfaces/hotels/hotels.model'
-import { formatRoomDetails } from '../utils/formatters'
-import { formatDate } from '../utils/date-time'
+import { useRoute, useRouter } from 'vue-router'
 import { useFilterValuesStore } from '../stores/filterValues'
 import { useHotelsStore } from '../stores/hotelsStore'
-
+import { formatRoomDetails } from '../utils/formatters'
+import { formatDate } from '../utils/date-time'
 import {
   getRoomRules,
   getNameRules,
@@ -179,6 +177,7 @@ import {
   getEmailRules,
   getPaymentMethodRules
 } from '../utils/validationRules'
+import { getHotelById, makeReservation } from '../services/apiService' // Import the service functions
 
 export default defineComponent({
   components: {
@@ -195,7 +194,6 @@ export default defineComponent({
     VSelect,
     VSnackbar
   },
-
   setup() {
     const route = useRoute()
     const router = useRouter()
@@ -229,17 +227,8 @@ export default defineComponent({
     const paymentMethodRules = getPaymentMethodRules()
 
     const fetchHotel = async () => {
-      try {
-        const response = await axios.get('http://localhost:3001/hotels/', {
-          params: {
-            id: route.params.id
-          }
-        })
-        hotel.value = response.data[0]
-        console.log(hotel.value)
-      } catch (error) {
-        console.log(error)
-      }
+      const hotelId = route.params.id as string
+      hotel.value = await getHotelById(hotelId)
     }
 
     const formattedDates = computed(() => {
@@ -309,7 +298,7 @@ export default defineComponent({
         }
 
         try {
-          const response = await axios.post('http://localhost:3001/shopping/', payload)
+          await makeReservation(payload)
           snackbarMessage.value = 'Reserva realizada com sucesso!'
           snackbar.value = true
         } catch (error) {
@@ -339,7 +328,7 @@ export default defineComponent({
 
       const totalRoomsCost = Object.keys(selectedRooms.value).reduce((total, roomId) => {
         const roomCount = selectedRooms.value[roomId] || 0
-        const room = hotel.value?.rooms.find((r) => r.id === parseInt(roomId))
+        const room = hotel.value?.rooms.find((r: { id: number }) => r.id === parseInt(roomId))
         const roomCost = room ? room.price : 0
         return total + roomCount * roomCost
       }, 0)
